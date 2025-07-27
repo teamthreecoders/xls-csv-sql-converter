@@ -1,6 +1,4 @@
 import re
-from turtledemo.lindenmayer import replace
-
 import pandas as pd
 import scripts.df_handler as dfh
 from utils.utils import Utils
