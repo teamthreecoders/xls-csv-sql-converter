@@ -1,6 +1,4 @@
 import re
-
-
 import pandas as pd
 import scripts.df_handler as dfh
 from utils.utils import Utils
@@ -104,24 +102,16 @@ class ExportFileHandler:
         last_row_count = int(self._dfh.get_shape()[0])
 
         values = []
-
         for idx,row in enumerate(updated_data_set.itertuples(index = False)):
-            val = ""
-            if idx == 0 or idx%500 == 0:
-                val = val+f"INSERT INTO {self._table_name} (\n\t{dml_column_list_str} \t\n)\nVALUES\n{values}"
-            val = val+("("+",".join([str(value) for value in row])+")"+(";\n" if idx+1 == last_row_count or idx%500 == 0 else ",\n"))
+            val = ("("+",".join([str(value) for value in row])+")"+(";\n" if idx+1 == last_row_count else ",\n"))
             val = val.replace("'None'","NULL")
             val = val.replace("'nan'","NULL")
             val = val.replace("'NaN'","NULL")
             val = val.replace("'NaT'","NULL")
             val = val.replace("''","NULL")
-
             values.append(val)
-
-
         values = "".join(values)
         dml = f"INSERT INTO {self._table_name} (\n\t{dml_column_list_str} \t\n)\nVALUES\n{values}"
 
         return dml
-
 
