@@ -164,7 +164,7 @@ def page1():
             mime="text/sql",
             help="Click me to download the DDL script"
         )
-    if col_cnt > 5000:
+    if col_cnt > 1000:
         st.warning("😢DDL file is too large to display in the page. Please download it.")
     else:
         st.code(ddl_sql, language="sql", height=300)
@@ -182,7 +182,7 @@ def page1():
             mime="text/sql",
             help="Click me to download the DML script"
         )
-    if row_cnt > 5000:
+    if row_cnt > 1000:
         st.warning("😢DML file is too large to display in the page. Please download it.")
     else:
         st.code(dml_sql, language="sql", height=400)
