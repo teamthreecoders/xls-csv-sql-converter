@@ -51,9 +51,23 @@ def page1():
 
     selected_columns = st.multiselect("Choose columns:", options=df_col_list, default=df_col_list)
     # show dataframe
+
     DF_CONTENT = DF_HANDLER.get_df(col_list=selected_columns)
 
-    st.dataframe(DF_CONTENT.head(10))
+    st.dataframe(DF_CONTENT.sample(min(10, len(DF_CONTENT))))
+
+    # st.title("Count based on group by:")
+    # st.markdown("---")
+    #
+    # # Select columns to group by
+    # group_by_col = st.multiselect("Choose column to group by:", options=df_col_list)
+    #
+    # if group_by_col:
+    #     grouped_df = DF_CONTENT.groupby(by=group_by_col)
+    #     st.dataframe(grouped_df.count())
+    # else:
+    #     st.info("Please select at least one column to group by.")
+
 
     # # ask for fill NA value
     # st.text("Fill null value")
@@ -102,7 +116,6 @@ def page1():
     #             except ValueError:
     #                 st.error(f"Invalid value for column {col} with type {dtype.__name__}")
 
-
     st.title("DDL / DML Files:")
     st.markdown("---")
     table_name = st.text_input("Enter the table name:", max_chars=255, placeholder="Enter the table name:")
@@ -144,6 +157,8 @@ def page1():
         print(e)
         return
 
+    selected_case =  st.selectbox("Change column case to", options=["UPPERCASE", "lowercase","Original","SwApCaSe","Capitalize","TitleCase"], key="name_case")
+    export.setCase(selected_case)
 
 
     with st.spinner("Preparing SQL scripts...",_cache=False):
@@ -185,32 +200,7 @@ def page1():
     if row_cnt > 1000:
         st.warning("😢DML file is too large to display in the page. Please download it.")
     else:
-        st.code(dml_sql, language="sql", height=400)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        try:
+            st.code(dml_sql, language="sql", height=400)
+        except Exception as e:
+            st.error(e)

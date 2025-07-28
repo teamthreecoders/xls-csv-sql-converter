@@ -50,33 +50,33 @@ class Utils:
             'SNOWFLAKE': 'INTEGER',
             'SINGLESTORE': 'INT'
         },
-        'BIGINT': {
-            'ORACLE': 'NUMBER',
-            'MYSQL': 'BIGINT',
+        'NUMBER(38,0)': {
+            'ORACLE': 'NUMBER(38,0)',
+            'MYSQL': 'BIGINT(20)',
             'POSTGRES': 'BIGINT',
-            'SNOWFLAKE': 'BIGINT',
-            'SINGLESTORE': 'BIGINT'
+            'SNOWFLAKE': 'NUMBER(38,0)',
+            'SINGLESTORE': 'BIGINT(20)'
         },
-        'FLOAT': {
-            'ORACLE': 'BINARY_FLOAT',
-            'MYSQL': 'FLOAT',
+        'NUMBER(38,2)': {
+            'ORACLE': 'NUMBER(38,2)',
+            'MYSQL': 'DECIMAL(38,2)',
             'POSTGRES': 'REAL',
-            'SNOWFLAKE': 'FLOAT',
-            'SINGLESTORE': 'FLOAT'
+            'SNOWFLAKE': 'NUMBER(38,2)',
+            'SINGLESTORE': 'DECIMAL(38,2)'
         },
         'DOUBLE': {
             'ORACLE': 'BINARY_DOUBLE',
             'MYSQL': 'DOUBLE',
             'POSTGRES': 'DOUBLE PRECISION',
-            'SNOWFLAKE': 'FLOAT',
+            'SNOWFLAKE': 'DECIMAL(38,2)',
             'SINGLESTORE': 'DOUBLE'
         },
         'DECIMAL': {
             'ORACLE': 'NUMBER',
-            'MYSQL': 'DECIMAL',
+            'MYSQL': 'NUMBER(38,2)',
             'POSTGRES': 'NUMERIC',
-            'SNOWFLAKE': 'NUMBER',
-            'SINGLESTORE': 'DECIMAL'
+            'SNOWFLAKE': 'NUMBER(38,2)',
+            'SINGLESTORE': 'DECIMAL(38,2)'
         },
         'BOOLEAN': {
             'ORACLE': 'NUMBER(1)',
@@ -146,3 +146,23 @@ class Utils:
         'YYYY-MM': '%Y-%m',
         'MM-YYYY': '%m-%Y'
     }
+    @classmethod
+    def changeCase(cls,case:str="UPPER"):
+        col_case = case.upper().replace("CASE", "")
+
+        if col_case == "UPPER":
+            to_case = lambda x: x.upper()
+        elif col_case == "LOWER":
+            to_case = lambda x: x.lower()
+        elif col_case == "CAPITALIZE":
+            to_case = lambda x: x.capitalize()
+        elif col_case == "TITLE":
+            to_case = lambda x: x.title()
+        elif col_case == "SWAP":
+            to_case = lambda x: x.swapcase()
+        else:
+            to_case = lambda x: x
+        return to_case
+
+
+

@@ -9,7 +9,7 @@ def app():
 
     st.set_page_config(
         page_title="XLS and CSV to SQL Converter",
-        page_icon="https://www.svgrepo.com/show/148452/sql.svg",  # Or use a path to a custom .ico/.png
+        page_icon="media/5e0706fd002e536e.png",  # Or use a path to a custom .ico/.png
         layout="centered",  # Or "wide"
 
     )
