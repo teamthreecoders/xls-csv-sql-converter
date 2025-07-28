@@ -116,7 +116,7 @@ class ExportFileHandler:
         for idx,row in enumerate(updated_data_set.itertuples(index = False)):
             val = ""
             if idx == 0 or idx%500 == 0:
-                val = val+f"INSERT INTO {self._table_name} (\n\t{dml_column_list_str} \t\n)\nVALUES\n"
+                val = val+f"INSERT INTO {to_case(self._table_name)} (\n\t{dml_column_list_str} \t\n)\nVALUES\n"
             val = val+("("+",".join([str(value) for value in row])+")"+(";\n" if idx+1 == last_row_count or (idx>0 and (idx+1)%500 == 0) else ",\n"))
             values.append(val)
         dml = "".join(values)
