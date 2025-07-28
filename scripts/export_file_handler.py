@@ -10,7 +10,7 @@ class ExportFileHandler:
         if dataframe is None or dataframe.shape[0] == 0:
             raise ValueError("Dataframe is empty")
         if len(selected_columns) == 0:
-            raise ValueError("Selected columns are empty")
+            raise ValueError("Please select at least one column")
         if table_name == "":
             raise ValueError("Table name could not be empty")
 

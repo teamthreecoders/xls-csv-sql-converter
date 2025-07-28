@@ -51,9 +51,8 @@ def page1():
 
     selected_columns = st.multiselect("Choose columns:", options=df_col_list, default=df_col_list)
     # show dataframe
-
-    DF_CONTENT = DF_HANDLER.get_df(col_list=selected_columns)
-
+    
+    DF_CONTENT = DF_HANDLER.get_df(col_list= selected_columns if len(selected_columns) > 0 else df_col_list)
     st.dataframe(DF_CONTENT.sample(min(10, len(DF_CONTENT))))
 
     # st.title("Count based on group by:")
@@ -130,10 +129,11 @@ def page1():
 
     # Optional: stop further processing if invalid
     if not table_name:
-        st.warning("⚠️ Please enter table name.")
+        st.info("⚠️ Please enter table name.")
         return
 
     elif not is_valid_table_name(table_name):
+        st.warning("Please enter a valid table name.")
         st.stop()
 
 
@@ -148,8 +148,7 @@ def page1():
         export = efh.ExportFileHandler(df,selected_columns,table_name,selected_db)
     except ValueError as e:
         print(e)
-        st.error("Something went wrong..." )
-        st.error(e)
+        st.info(e)
         return
 
     except Exception as e:
