@@ -51,8 +51,10 @@ def page1():
 
     selected_columns = st.multiselect("Choose columns:", options=df_col_list, default=df_col_list)
     # show dataframe
-    
-    DF_CONTENT = DF_HANDLER.get_df(col_list= selected_columns if len(selected_columns) > 0 else df_col_list)
+
+    selected_columns = selected_columns if len(selected_columns) > 0 else df_col_list
+
+    DF_CONTENT = DF_HANDLER.get_df(col_list= selected_columns )
     st.dataframe(DF_CONTENT.sample(min(10, len(DF_CONTENT))))
 
     # st.title("Count based on group by:")
