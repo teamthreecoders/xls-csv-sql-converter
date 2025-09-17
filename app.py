@@ -495,7 +495,7 @@ def app():
                 font-size: 1.5rem;
             }}
             .header-container {{
-                padding: {'1.5rem 1rem' if layout_compact else '2rem 1rem'};
+                padding: 2rem 1rem;
             }}
             .stats-grid {{
                 grid-template-columns: 1fr;
