@@ -182,6 +182,22 @@ def app():
     if primary_color != "#3b82f6":  # If user changed primary color
         current_theme["primary"] = primary_color
     
+    # Calculate responsive values
+    compact_header_padding = "2rem 1.5rem" if layout_compact else "3rem 2rem"
+    compact_margin = "2rem" if layout_compact else "3rem"
+    compact_font_size = "1.75rem" if layout_compact else "2rem"
+    compact_title_size = "1.25rem" if layout_compact else "1.5rem"
+    compact_logo_size = "50px" if layout_compact else "60px"
+    compact_logo_font = "24px" if layout_compact else "28px"
+    compact_tagline_size = "1rem" if layout_compact else "1.125rem"
+    compact_stats_gap = "1rem" if layout_compact else "1.5rem"
+    compact_stats_padding = "1.5rem 1rem" if layout_compact else "2rem 1.5rem"
+    compact_stats_font = "1.75rem" if layout_compact else "2rem"
+    compact_footer_padding = "1.5rem" if layout_compact else "2rem"
+    compact_section_margin = "2rem 0" if layout_compact else "3rem 0"
+    compact_section_title_margin = "1.5rem 0" if layout_compact else "2rem 0"
+    compact_mobile_header_padding = "1.5rem 1rem" if layout_compact else "2rem 1rem"
+    
     # Professional CSS styling with dynamic themes and proper background handling
     st.markdown(f"""
         <style>
@@ -210,8 +226,8 @@ def app():
         
         /* Reset and base styles */
         .main .block-container {{
-            padding-top: {'1rem' if layout_compact else '2rem'};
-            padding-bottom: {'1rem' if layout_compact else '2rem'};
+            padding-top: 2rem;
+            padding-bottom: 2rem;
             max-width: 1200px;
             background-color: transparent !important;
         }}
@@ -232,10 +248,10 @@ def app():
             font-size: 1.2rem;
             z-index: 1000;
             box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            {'transition: all 0.3s ease;' if show_animations else ''}
+            {"transition: all 0.3s ease;" if show_animations else ""}
         }}
         
-        {'.theme-auto-toggle:hover { transform: scale(1.1); }' if show_animations else ''}
+        {".theme-auto-toggle:hover { transform: scale(1.1); }" if show_animations else ""}
         
         /* Sidebar styling */
         .css-1d391kg, .css-1y4p8pa {{
@@ -268,47 +284,66 @@ def app():
             color: var(--text-color) !important;
         }}
         
+        /* Sidebar toggle fix */
+        .css-1rs6os {{
+            width: 21rem !important;
+        }}
+        
+        .css-17eq0hr {{
+            width: 21rem !important;
+        }}
+        
+        /* Sidebar header styling */
+        .css-1d391kg h1, .css-1d391kg h2, .css-1d391kg h3 {{
+            color: var(--text-color) !important;
+        }}
+        
+        /* Ensure sidebar can be reopened */
+        .css-1y4p8pa {{
+            position: relative !important;
+        }}
+        
         /* Professional header */
         .header-container {{
             background: var(--surface-color);
             border: 1px solid var(--accent-color);
             border-radius: 12px;
-            padding: {'2rem 1.5rem' if layout_compact else '3rem 2rem'};
-            margin-bottom: {'2rem' if layout_compact else '3rem'};
+            padding: {compact_header_padding};
+            margin-bottom: {compact_margin};
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            {'transition: all 0.3s ease;' if show_animations else ''}
+            {"transition: all 0.3s ease;" if show_animations else ""}
         }}
         
-        {'@media (hover: hover) { .header-container:hover { transform: translateY(-2px); box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1); } }' if show_animations else ''}
+        {"@media (hover: hover) { .header-container:hover { transform: translateY(-2px); box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1); } }" if show_animations else ""}
         
         .company-logo {{
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: {'1rem' if layout_compact else '1.5rem'};
+            margin-bottom: 1.5rem;
         }}
         
         .logo-icon {{
             background: var(--primary-color);
             color: white;
-            width: {'50px' if layout_compact else '60px'};
-            height: {'50px' if layout_compact else '60px'};
+            width: {compact_logo_size};
+            height: {compact_logo_size};
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: {'24px' if layout_compact else '28px'};
+            font-size: {compact_logo_font};
             font-weight: bold;
             margin-right: 1rem;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-            {'transition: transform 0.2s ease;' if show_animations else ''}
+            {"transition: transform 0.2s ease;" if show_animations else ""}
         }}
         
-        {'@media (hover: hover) { .logo-icon:hover { transform: rotate(5deg) scale(1.05); } }' if show_animations else ''}
+        {"@media (hover: hover) { .logo-icon:hover { transform: rotate(5deg) scale(1.05); } }" if show_animations else ""}
         
         .company-name {{
             font-family: 'Inter', sans-serif;
-            font-size: {'1.75rem' if layout_compact else '2rem'};
+            font-size: {compact_font_size};
             font-weight: 800;
             color: var(--text-color);
             letter-spacing: -0.025em;
@@ -317,7 +352,7 @@ def app():
         .tagline {{
             text-align: center;
             font-family: 'Inter', sans-serif;
-            font-size: {'1rem' if layout_compact else '1.125rem'};
+            font-size: {compact_tagline_size};
             color: var(--text-color);
             opacity: 0.7;
             font-weight: 400;
@@ -327,26 +362,26 @@ def app():
         
         /* Professional stats/features */
         .stats-grid {{
-            display: {'none' if not show_stats else 'grid'};
+            display: {"none" if not show_stats else "grid"};
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: {'1rem' if layout_compact else '1.5rem'};
-            margin: {'1.5rem 0' if layout_compact else '2.5rem 0'};
+            gap: {compact_stats_gap};
+            margin: 2.5rem 0;
         }}
         
         .stat-card {{
             background: var(--surface-color);
             border: 1px solid var(--accent-color);
             border-radius: 8px;
-            padding: {'1.5rem 1rem' if layout_compact else '2rem 1.5rem'};
+            padding: {compact_stats_padding};
             text-align: center;
-            {'transition: all 0.3s ease;' if show_animations else ''}
+            {"transition: all 0.3s ease;" if show_animations else ""}
         }}
         
-        {'.stat-card:hover { border-color: var(--primary-color); transform: translateY(-3px); box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1); }' if show_animations else '.stat-card:hover { border-color: var(--primary-color); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }'}
+        {".stat-card:hover { border-color: var(--primary-color); transform: translateY(-3px); box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1); }" if show_animations else ".stat-card:hover { border-color: var(--primary-color); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }"}
         
         .stat-number {{
             font-family: 'Inter', sans-serif;
-            font-size: {'1.75rem' if layout_compact else '2rem'};
+            font-size: {compact_stats_font};
             font-weight: 700;
             color: var(--primary-color);
             line-height: 1;
@@ -384,16 +419,16 @@ def app():
             border: none;
             height: 1px;
             background: linear-gradient(to right, transparent, var(--accent-color), transparent);
-            margin: {'2rem 0' if layout_compact else '3rem 0'};
+            margin: {compact_section_margin};
         }}
         
         .section-title {{
             font-family: 'Inter', sans-serif;
-            font-size: {'1.25rem' if layout_compact else '1.5rem'};
+            font-size: {compact_title_size};
             font-weight: 600;
             color: var(--text-color);
             text-align: center;
-            margin: {'1.5rem 0' if layout_compact else '2rem 0'};
+            margin: {compact_section_title_margin};
             position: relative;
         }}
         
@@ -414,8 +449,8 @@ def app():
             background: var(--surface-color);
             border: 1px solid var(--accent-color);
             border-radius: 8px;
-            padding: {'1.5rem' if layout_compact else '2rem'};
-            margin-top: {'2rem' if layout_compact else '3rem'};
+            padding: {compact_footer_padding};
+            margin-top: 3rem;
             text-align: center;
         }}
         
@@ -438,11 +473,11 @@ def app():
             font-size: 0.875rem;
             font-weight: 500;
             text-decoration: none;
-            {'transition: all 0.2s ease;' if show_animations else ''}
+            {"transition: all 0.2s ease;" if show_animations else ""}
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }}
         
-        {'.developer-info:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); }' if show_animations else '.developer-info:hover { opacity: 0.9; }'}
+        {".developer-info:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); }" if show_animations else ".developer-info:hover { opacity: 0.9; }"}
         
         .developer-info::before {{
             content: "👨‍💻";
@@ -470,45 +505,13 @@ def app():
         header {{visibility: hidden;}}
         .stDeployButton {{visibility: hidden;}}
         
-        /* Sidebar toggle fix */
-        .css-1rs6os {{
-            width: 21rem !important;
-        }}
-        
-        .css-17eq0hr {{
-            width: 21rem !important;
-        }}
-        
-        /* Sidebar header styling */
-        .css-1d391kg h1, .css-1d391kg h2, .css-1d391kg h3 {{
-            color: var(--text-color) !important;
-        }}
-        
-        /* Ensure sidebar can be reopened */
-        .css-1y4p8pa {{
-            position: relative !important;
-        }}
-        
         /* Professional responsive design */
         @media (max-width: 768px) {{
             .company-name {{
                 font-size: 1.5rem;
             }}
             .header-container {{
-                padding: 2rem 1rem;
-            }}
-            .stats-grid {{
-                grid-template-columns: 1fr;
-            }}
-            .theme-indicator {{
-                position: relative;
-                top: auto;
-                right: auto;
-                margin-bottom: 1rem;
-            }}
-        }}
-        </style>
-    """, unsafe_allow_html=True)' if layout_compact else '2rem 1rem'};
+                padding: {compact_mobile_header_padding};
             }}
             .stats-grid {{
                 grid-template-columns: 1fr;
