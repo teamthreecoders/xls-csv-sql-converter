@@ -108,6 +108,7 @@ class ExportFileHandler:
             elif dataType.lower().find("timestamp") != -1:
                 updated_data_set[col] = "'"+updated_data_set[col].astype(str)+"'"
             else:
+                updated_data_set[col] = updated_data_set[col].str.replace("'", "''", regex=False)
                 updated_data_set[col] = "'" +updated_data_set[col].astype(str)+ "'"
             # fill NULL
             updated_data_set[col] = updated_data_set[col].apply(lambda data: "NULL" if  any(sub in str(data).lower() for sub in  ["None","nan","NaN","NaT","''"]) else data)
@@ -123,4 +124,3 @@ class ExportFileHandler:
         # dml = f"INSERT INTO {self._table_name} (\n\t{dml_column_list_str} \t\n)\nVALUES\n{values}"
 
         return dml
-
