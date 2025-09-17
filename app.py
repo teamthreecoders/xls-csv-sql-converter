@@ -11,6 +11,33 @@ def app():
         initial_sidebar_state="expanded"
     )
     
+    # Add sidebar toggle functionality
+    st.markdown("""
+        <script>
+        // Fix sidebar toggle functionality
+        const sidebarToggle = () => {
+            const sidebar = document.querySelector('[data-testid="stSidebar"]');
+            const collapseBtn = document.querySelector('[data-testid="collapsedControl"]');
+            
+            if (sidebar && collapseBtn) {
+                collapseBtn.style.display = 'block';
+                collapseBtn.style.position = 'fixed';
+                collapseBtn.style.top = '10px';
+                collapseBtn.style.left = '10px';
+                collapseBtn.style.zIndex = '999999';
+                collapseBtn.style.backgroundColor = 'var(--primary-color)';
+                collapseBtn.style.borderRadius = '8px';
+                collapseBtn.style.padding = '8px';
+                collapseBtn.style.cursor = 'pointer';
+            }
+        };
+        
+        // Run when page loads
+        document.addEventListener('DOMContentLoaded', sidebarToggle);
+        setTimeout(sidebarToggle, 1000); // Fallback
+        </script>
+    """, unsafe_allow_html=True)
+    
     # Theme configuration in sidebar
     with st.sidebar:
         st.markdown("### 🎨 Theme Customization")
@@ -442,6 +469,25 @@ def app():
         footer {{visibility: hidden;}}
         header {{visibility: hidden;}}
         .stDeployButton {{visibility: hidden;}}
+        
+        /* Sidebar toggle fix */
+        .css-1rs6os {{
+            width: 21rem !important;
+        }}
+        
+        .css-17eq0hr {{
+            width: 21rem !important;
+        }}
+        
+        /* Sidebar header styling */
+        .css-1d391kg h1, .css-1d391kg h2, .css-1d391kg h3 {{
+            color: var(--text-color) !important;
+        }}
+        
+        /* Ensure sidebar can be reopened */
+        .css-1y4p8pa {{
+            position: relative !important;
+        }}
         
         /* Professional responsive design */
         @media (max-width: 768px) {{
