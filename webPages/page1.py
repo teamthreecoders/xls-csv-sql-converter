@@ -19,7 +19,7 @@ def page1():
 
     st.success("Uploaded file:: \t"+ UPLOAD_FILE_PATH.name)
 
-    if UPLOAD_FILE_PATH.name.endswith(".xls") or UPLOAD_FILE_PATH.name.endswith(".xlsx")):
+    if UPLOAD_FILE_PATH.name.endswith(".xls") or UPLOAD_FILE_PATH.name.endswith(".xlsx"):
         df = file_handler.readExcel()
     elif UPLOAD_FILE_PATH.name.endswith(".csv"):
         df = file_handler.readCsv()
