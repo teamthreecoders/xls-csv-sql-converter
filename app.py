@@ -15,11 +15,31 @@ def app():
     with st.sidebar:
         st.markdown("### 🎨 Theme Customization")
         
-        # Theme selection
-        theme_option = st.selectbox(
-            "Choose Theme",
-            ["Corporate Blue", "Professional Dark", "Modern Green", "Executive Purple", "Minimalist Gray"]
+        # Auto/Manual theme toggle
+        theme_mode = st.radio(
+            "Theme Mode",
+            ["🌙 Auto (System)", "☀️ Light Mode", "🌙 Dark Mode"],
+            horizontal=True
         )
+        
+        # Theme selection
+        if theme_mode == "🌙 Auto (System)":
+            st.markdown("*Using system preference*")
+            theme_option = st.selectbox(
+                "Choose Theme",
+                ["Corporate Blue", "Professional Dark", "Modern Green", "Executive Purple", "Minimalist Gray"],
+                index=1  # Default to dark for auto
+            )
+        elif theme_mode == "🌙 Dark Mode":
+            theme_option = st.selectbox(
+                "Choose Dark Theme",
+                ["Professional Dark", "Dark Corporate Blue", "Dark Modern Green", "Dark Executive Purple", "Dark Minimalist"]
+            )
+        else:  # Light Mode
+            theme_option = st.selectbox(
+                "Choose Light Theme",
+                ["Corporate Blue", "Modern Green", "Executive Purple", "Minimalist Gray", "Clean White"]
+            )
         
         # Layout options
         layout_compact = st.checkbox("Compact Layout", value=False)
@@ -34,23 +54,17 @@ def app():
         st.markdown("**Theme Settings**")
         st.caption("Customize your workspace appearance")
     
-    # Dynamic theme configuration
+    # Dynamic theme configuration with enhanced dark/light modes
     theme_configs = {
+        # Light themes
         "Corporate Blue": {
             "primary": "#3b82f6",
             "secondary": "#1e40af",
             "background": "#ffffff",
             "surface": "#f8fafc",
             "text": "#111827",
-            "accent": "#dbeafe"
-        },
-        "Professional Dark": {
-            "primary": "#60a5fa",
-            "secondary": "#3b82f6",
-            "background": "#111827",
-            "surface": "#1f2937",
-            "text": "#f9fafb",
-            "accent": "#374151"
+            "accent": "#dbeafe",
+            "body_bg": "#f8fafc"
         },
         "Modern Green": {
             "primary": "#10b981",
@@ -58,7 +72,8 @@ def app():
             "background": "#ffffff",
             "surface": "#f0fdf4",
             "text": "#111827",
-            "accent": "#d1fae5"
+            "accent": "#d1fae5",
+            "body_bg": "#f0fdf4"
         },
         "Executive Purple": {
             "primary": "#8b5cf6",
@@ -66,7 +81,8 @@ def app():
             "background": "#ffffff",
             "surface": "#faf5ff",
             "text": "#111827",
-            "accent": "#ede9fe"
+            "accent": "#ede9fe",
+            "body_bg": "#faf5ff"
         },
         "Minimalist Gray": {
             "primary": "#6b7280",
@@ -74,7 +90,63 @@ def app():
             "background": "#ffffff",
             "surface": "#f9fafb",
             "text": "#111827",
-            "accent": "#f3f4f6"
+            "accent": "#f3f4f6",
+            "body_bg": "#f9fafb"
+        },
+        "Clean White": {
+            "primary": "#2563eb",
+            "secondary": "#1d4ed8",
+            "background": "#ffffff",
+            "surface": "#ffffff",
+            "text": "#111827",
+            "accent": "#f1f5f9",
+            "body_bg": "#ffffff"
+        },
+        # Dark themes
+        "Professional Dark": {
+            "primary": "#60a5fa",
+            "secondary": "#3b82f6",
+            "background": "#111827",
+            "surface": "#1f2937",
+            "text": "#f9fafb",
+            "accent": "#374151",
+            "body_bg": "#0f172a"
+        },
+        "Dark Corporate Blue": {
+            "primary": "#93c5fd",
+            "secondary": "#60a5fa",
+            "background": "#1e293b",
+            "surface": "#334155",
+            "text": "#f1f5f9",
+            "accent": "#475569",
+            "body_bg": "#0f172a"
+        },
+        "Dark Modern Green": {
+            "primary": "#34d399",
+            "secondary": "#10b981",
+            "background": "#064e3b",
+            "surface": "#065f46",
+            "text": "#ecfdf5",
+            "accent": "#047857",
+            "body_bg": "#022c22"
+        },
+        "Dark Executive Purple": {
+            "primary": "#a78bfa",
+            "secondary": "#8b5cf6",
+            "background": "#581c87",
+            "surface": "#6b21a8",
+            "text": "#faf5ff",
+            "accent": "#7c3aed",
+            "body_bg": "#4c1d95"
+        },
+        "Dark Minimalist": {
+            "primary": "#9ca3af",
+            "secondary": "#6b7280",
+            "background": "#1f2937",
+            "surface": "#374151",
+            "text": "#f9fafb",
+            "accent": "#4b5563",
+            "body_bg": "#111827"
         }
     }
     
@@ -83,7 +155,7 @@ def app():
     if primary_color != "#3b82f6":  # If user changed primary color
         current_theme["primary"] = primary_color
     
-    # Professional CSS styling with dynamic themes
+    # Professional CSS styling with dynamic themes and proper background handling
     st.markdown(f"""
         <style>
         /* Import professional fonts */
@@ -97,6 +169,16 @@ def app():
             --surface-color: {current_theme["surface"]};
             --text-color: {current_theme["text"]};
             --accent-color: {current_theme["accent"]};
+            --body-bg-color: {current_theme["body_bg"]};
+        }}
+        
+        /* Global background styling */
+        .stApp {{
+            background-color: var(--body-bg-color) !important;
+        }}
+        
+        .main {{
+            background-color: var(--body-bg-color) !important;
         }}
         
         /* Reset and base styles */
@@ -104,21 +186,73 @@ def app():
             padding-top: {'1rem' if layout_compact else '2rem'};
             padding-bottom: {'1rem' if layout_compact else '2rem'};
             max-width: 1200px;
-            background-color: var(--background-color);
+            background-color: transparent !important;
+        }}
+        
+        /* Auto theme detection JavaScript */
+        .theme-auto-toggle {{
+            position: fixed;
+            top: 60px;
+            right: 10px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            {'transition: all 0.3s ease;' if show_animations else ''}
+        }}
+        
+        {'.theme-auto-toggle:hover { transform: scale(1.1); }' if show_animations else ''}
+        
+        /* Sidebar styling */
+        .css-1d391kg, .css-1y4p8pa {{
+            background-color: var(--surface-color) !important;
+        }}
+        
+        .css-1d391kg .css-1v3fvcr {{
+            color: var(--text-color) !important;
+        }}
+        
+        /* Streamlit widgets styling for dark mode */
+        .stSelectbox > div > div {{
+            background-color: var(--surface-color) !important;
+            color: var(--text-color) !important;
+        }}
+        
+        .stCheckbox > label {{
+            color: var(--text-color) !important;
+        }}
+        
+        .stRadio > label {{
+            color: var(--text-color) !important;
+        }}
+        
+        .stColorPicker > label {{
+            color: var(--text-color) !important;
+        }}
+        
+        .stMarkdown {{
+            color: var(--text-color) !important;
         }}
         
         /* Professional header */
         .header-container {{
             background: var(--surface-color);
-            border: 1px solid {current_theme["accent"] if theme_option != "Professional Dark" else "#374151"};
+            border: 1px solid var(--accent-color);
             border-radius: 12px;
             padding: {'2rem 1.5rem' if layout_compact else '3rem 2rem'};
             margin-bottom: {'2rem' if layout_compact else '3rem'};
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             {'transition: all 0.3s ease;' if show_animations else ''}
         }}
         
-        {'@media (hover: hover) { .header-container:hover { transform: translateY(-2px); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); } }' if show_animations else ''}
+        {'@media (hover: hover) { .header-container:hover { transform: translateY(-2px); box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1); } }' if show_animations else ''}
         
         .company-logo {{
             display: flex;
@@ -139,7 +273,7 @@ def app():
             font-size: {'24px' if layout_compact else '28px'};
             font-weight: bold;
             margin-right: 1rem;
-            box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
             {'transition: transform 0.2s ease;' if show_animations else ''}
         }}
         
@@ -214,7 +348,8 @@ def app():
             font-size: 0.75rem;
             font-weight: 600;
             z-index: 1000;
-            opacity: 0.8;
+            opacity: 0.9;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }}
         
         /* Professional section dividers */
@@ -268,8 +403,8 @@ def app():
         .developer-info {{
             display: inline-flex;
             align-items: center;
-            background: var(--text-color);
-            color: var(--background-color);
+            background: var(--primary-color);
+            color: white;
             padding: 0.5rem 1rem;
             border-radius: 6px;
             font-family: 'Inter', sans-serif;
@@ -277,9 +412,10 @@ def app():
             font-weight: 500;
             text-decoration: none;
             {'transition: all 0.2s ease;' if show_animations else ''}
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }}
         
-        {'.developer-info:hover { opacity: 0.8; transform: translateY(-1px); }' if show_animations else '.developer-info:hover { opacity: 0.8; }'}
+        {'.developer-info:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); }' if show_animations else '.developer-info:hover { opacity: 0.9; }'}
         
         .developer-info::before {{
             content: "👨‍💻";
@@ -299,11 +435,6 @@ def app():
             text-transform: uppercase;
             letter-spacing: 0.05em;
             margin-bottom: 1rem;
-        }}
-        
-        /* Sidebar styling */
-        .css-1d391kg {{
-            background-color: var(--surface-color);
         }}
         
         /* Hide Streamlit elements */
@@ -331,10 +462,48 @@ def app():
             }}
         }}
         </style>
+    """, unsafe_allow_html=True)' if layout_compact else '2rem 1rem'};
+            }}
+            .stats-grid {{
+                grid-template-columns: 1fr;
+            }}
+            .theme-indicator {{
+                position: relative;
+                top: auto;
+                right: auto;
+                margin-bottom: 1rem;
+            }}
+        }}
+        </style>
     """, unsafe_allow_html=True)
     
-    # Theme indicator
-    st.markdown(f'<div class="theme-indicator">{theme_option}</div>', unsafe_allow_html=True)
+    # Theme indicator with mode display
+    mode_display = "🌙 Auto" if theme_mode == "🌙 Auto (System)" else ("🌙 Dark" if theme_mode == "🌙 Dark Mode" else "☀️ Light")
+    st.markdown(f'<div class="theme-indicator">{mode_display} | {theme_option}</div>', unsafe_allow_html=True)
+    
+    # Auto theme toggle button (JavaScript for system theme detection)
+    if theme_mode == "🌙 Auto (System)":
+        st.markdown("""
+            <button class="theme-auto-toggle" onclick="toggleAutoTheme()" title="Auto Theme Active">
+                🌓
+            </button>
+            <script>
+                function toggleAutoTheme() {
+                    const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                    if (isDark) {
+                        document.documentElement.style.setProperty('--primary-color', '#60a5fa');
+                        document.documentElement.style.setProperty('--body-bg-color', '#0f172a');
+                    } else {
+                        document.documentElement.style.setProperty('--primary-color', '#3b82f6');
+                        document.documentElement.style.setProperty('--body-bg-color', '#f8fafc');
+                    }
+                }
+                
+                // Auto-detect system theme on load
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', toggleAutoTheme);
+                toggleAutoTheme(); // Initial call
+            </script>
+        """, unsafe_allow_html=True)
     
     # Professional header section
     st.markdown("""
@@ -387,11 +556,11 @@ def app():
     st.markdown("""
         <div class="footer-container">
             <div class="footer-content">
-                © 2024 DataConverter Pro. All rights reserved.<br>
+                © 2024 TeamThreeCoders. All rights reserved.<br>
                 Professional data conversion solutions for enterprise applications.
             </div>
             <a href="#" class="developer-info">
-                Developed by Ayan
+                Developed with ❤️ by TeamThreeCoders<br>Ayan
             </a>
         </div>
     """, unsafe_allow_html=True)
