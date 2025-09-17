@@ -111,7 +111,7 @@ class ExportFileHandler:
                 updated_data_set[col] = updated_data_set[col].str.replace("'", "''", regex=False)
                 updated_data_set[col] = "'" +updated_data_set[col].astype(str)+ "'"
             # fill NULL
-            updated_data_set[col] = updated_data_set[col].apply(lambda data: "NULL" if  any(sub in str(data).lower() for sub in  ["None","nan","NaN","NaT","''"]) else data)
+            updated_data_set[col] = updated_data_set[col].apply(lambda data: "NULL" if  any(sub in str(data).lower() for sub in  ["None","nan","NaN","NaT"]) OR sub = '' else data)
 
         values = []
         for idx,row in enumerate(updated_data_set.itertuples(index = False)):
