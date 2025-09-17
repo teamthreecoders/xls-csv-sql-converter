@@ -14,7 +14,7 @@ def page1():
     # check file path have contained or not
 
     if UPLOAD_FILE_PATH is None:
-        st.error("Upload File (.xls, .csv)")
+        st.error("Upload File (.xlsx, .xls, .csv)")
         return
 
     st.success("Uploaded file:: \t"+ UPLOAD_FILE_PATH.name)
